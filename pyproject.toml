@@ -9,3 +9,8 @@ dependencies = [
     "psycopg[binary]>=3.3.6",
     "requests>=2.34.2",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.3",
+]

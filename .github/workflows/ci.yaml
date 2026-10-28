@@ -1,0 +1,39 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main", "develop", "feature/**"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    env:
+      DEBUG: "True"
+      SECRET_KEY: "ci-test-secret-key-library-hub"
+      # Для быстрых автотестов в GitHub используем встроенную SQLite
+      DATABASE_URL: "sqlite:///db.sqlite3"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv & Python 3.12
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Check Code Quality (Ruff)
+        run: uv run ruff check src/
+
+      - name: Check Django setup & missing migrations
+        run: |
+          uv run python src/manage.py check
+          uv run python src/manage.py makemigrations --check --dry-run

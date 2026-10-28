@@ -1,0 +1,11 @@
+[project]
+name = "library-hub"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.1.2",
+    "django-environ>=0.14.0",
+    "django-ninja>=1.7.1",
+    "psycopg[binary]>=3.3.6",
+    "requests>=2.34.2",
+]
